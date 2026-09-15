@@ -11,4 +11,14 @@ export class authController {
             return res.status(500).json({ message: "Internal Server error" })
         }
     }
+
+    static login(req, res) {
+        try {
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
+            return authServices.login(req.body, res)
+        } catch (error) {
+            return res.status(500).json({ message: "Internal Server error" })
+        }
+    }
 }

@@ -8,4 +8,9 @@ const registerValidator = [
     body("role").isIn(['admin', 'organizer', 'attendee']).withMessage("Invalid Role"),
 ]
 
-export { registerValidator }
+const loginValidator = [
+    body("email").isEmail().withMessage("Invalid Email"),
+    body("password").isLength({ min: 6, max: 20 }).withMessage("Password must be between 6 to 20 chars"),
+]
+
+export { registerValidator, loginValidator }
