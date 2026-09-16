@@ -8,30 +8,32 @@ import 'dotenv/config'
 const { JWT_SECRET_KEY } = process.env
 
 export class authServices {
-    static async register(body, res) {
+    static async register(body) {
         const { firstName, lastName, email, password, role } = body
         const [findUser] = await db.select().from(userTable).where(eq(userTable.email, email)).limit(1)
-        if (findUser) return res.status(409).json({ message: "User already exists" })
+        if (findUser) return { status: 409, message: "User already exists" }
         const hashedPassword = await hash(password, 12)
         await db.insert(userTable).values({
             firstName, lastName, email, password: hashedPassword, role
         })
-        return res.status(201).json({ message: "User created successfully" })
+        return { status: 201, message: "User created successfully" }
     }
 
-    static async login(body, res) {
+    static async login(body) {
         const { email, password } = body
         const [findUser] = await db.select().from(userTable).where(eq(userTable.email, email)).limit(1)
-        if (!findUser) return res.status(401).json({ message: "Invalid credentials" })
+        if (!findUser) return { status: 401, message: "Invalid credentials" }
         const isPasswordMatch = await compare(password, findUser?.password)
-        if (!isPasswordMatch) return res.status(401).json({ message: "Invalid credentials" })
+        if (!isPasswordMatch) return { status: 401, message: "Invalid credentials" }
 
         const token = jwt.sign({ uid: findUser.id }, JWT_SECRET_KEY, { expiresIn: '1h' })
+        return { status: 200, message: "Login successful", token }
+    }
 
-        res.cookie('token', token, {
-            maxAge: 1000 * 60 * 60,
-            httpOnly: true, secure: true, sameSite: 'lax'
-        })
-        return res.status(200).json({ message: "Login successful" })
+    static async getUser(uid) {
+        const [user] = await db.select().from(userTable).where(eq(userTable.id, uid)).limit(1)
+        if (!user) return { status: 404, message: "User not found" }
+        const { password, ...userToSend } = user
+        return { status: 200, message: "User found", data: userToSend }
     }
 }
