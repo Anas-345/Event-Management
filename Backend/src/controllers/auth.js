@@ -39,4 +39,16 @@ export class authController {
             return res.status(500).json({ message: "Internal Server error" })
         }
     }
+
+    static logout(req, res) {
+        try {
+            res.clearCookie('token', {
+                httpOnly: true,
+                sameSite: 'lax',
+            })
+            return res.status(204).send()
+        } catch (error) {
+            return res.status(500).json({ message: 'Internal Server error' })
+        }
+    }
 }
