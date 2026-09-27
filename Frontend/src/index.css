@@ -1,1 +1,93 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #f7f4ee;
+  --surface: #fffdf9;
+
+  --foreground: #29251f;
+  --text-secondary: #756f66;
+
+  --primary: #b85c38;
+  --primary-hover: #98472b;
+
+  --accent: #e4e8d8;
+
+  --success: #5f8f68;
+  --warning: #c98a32;
+  --danger: #c94a3a;
+}
+
+.dark {
+  --background: #1c1a17;
+  --surface: #26231f;
+
+  --foreground: #f5f1e8;
+  --text-secondary: #aaa49a;
+
+  --primary: #d47752;
+  --primary-hover: #e28a65;
+
+  --accent: #353b2d;
+
+  --success: #79a982;
+  --warning: #d9a34a;
+  --danger: #df6a5b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+
+  --color-foreground: var(--foreground);
+  --color-text-secondary: var(--text-secondary);
+
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+
+  --color-accent: var(--accent);
+
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+
+  --font-sans: "Geist Variable", sans-serif;
+}
+
+@theme {
+    --animate-toast-in: toast-in 0.3s ease-out;
+    --animate-toast-out: toast-out 0.22s ease-in forwards;
+
+    @keyframes toast-in {
+        from {
+            opacity: 0;
+            transform: translateY(-12px) scale(0.96);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @keyframes toast-out {
+        from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-8px) scale(0.95);
+        }
+    }
+}
+
+@layer base {
+  html {
+    @apply font-sans;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+  }
+}
