@@ -5,15 +5,17 @@ import { useForm } from "react-hook-form"
 import toast from "../toast/Toast"
 import InputField from "../common/InputField"
 import { fieldClass } from "../common/inputFieldStyle"
+import { registerAPI } from "@/services/auth"
+
 
 export default function RegisterForm() {
     const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(registerValidator)
     })
 
-    function submit(data) {
-        console.log(data)
-        toast({ title: "Register", type: "success", message: "Account created! Welcome to EventFlow — your journey starts here.", })
+    async function submit(data) {
+        const res = await registerAPI(data)
+        toast({ title: "Register", type: res.status == "201" ? "success" : "error", message: res.data.message, })
     }
 
     function handleErrors(errors) {
