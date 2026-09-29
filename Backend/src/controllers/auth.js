@@ -17,7 +17,7 @@ export class authController {
         try {
             const errors = validationResult(req)
             if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
-            const resData = await authServices.login(req.body)
+                const resData = await authServices.login(req.body)
             if (resData.status !== 200) return res.status(resData.status).json({ message: resData.message })
             res.cookie('token', resData.token, {
                 maxAge: 1000 * 60 * 60,
@@ -25,6 +25,7 @@ export class authController {
             })
             return res.status(resData.status).json({ message: resData.message })
         } catch (error) {
+            console.log(error)
             return res.status(500).json({ message: "Internal Server error" })
         }
     }

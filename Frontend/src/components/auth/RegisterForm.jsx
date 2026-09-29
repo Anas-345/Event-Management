@@ -1,26 +1,29 @@
-import { registerValidator } from "@/validators/registerValidator"
+import { registerValidator } from "@/validators/authValidator"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ChevronDownIcon, CircleAlert } from "lucide-react"
+import { ChevronDownIcon, CircleAlert, LoaderCircle } from "lucide-react"
 import { useForm } from "react-hook-form"
 import toast from "../toast/Toast"
 import InputField from "../common/InputField"
 import { fieldClass } from "../common/inputFieldStyle"
 import { registerAPI } from "@/services/auth"
+import { useNavigate } from "react-router"
 
 
 export default function RegisterForm() {
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const navigate = useNavigate()
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
         resolver: zodResolver(registerValidator)
     })
 
     async function submit(data) {
         const res = await registerAPI(data)
-        toast({ title: "Register", type: res.status == "201" ? "success" : "error", message: res.data.message, })
+        const success = res.status === 201
+        toast({ title: "Register", type: success ? "success" : "error", message: res.data.message, })
+        if (success) navigate("/")
     }
 
     function handleErrors(errors) {
         const firstError = Object.values(errors)[0]?.message
-        console.log(firstError)
         toast({
             type: "error",
             message: firstError || "Please review the highlighted fields and try again.",
@@ -132,9 +135,13 @@ export default function RegisterForm() {
 
             <button
                 type="submit"
-                className="mt-2 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-surface active:scale-[0.99] cursor-pointer"
+                disabled={isSubmitting}
+                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-surface active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-primary disabled:active:scale-100 cursor-pointer"
             >
-                Create account
+                {isSubmitting && (
+                    <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" />
+                )}
+                {isSubmitting ? "Creating your account..." : "Create account"}
             </button>
 
             <p className="text-center text-xs leading-relaxed text-text-secondary">

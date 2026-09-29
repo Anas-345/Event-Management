@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../db/index.js";
 import { userTable } from "../db/schema.js";
 import { compare, hash } from 'bcrypt'
-import * as jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 
 const { JWT_SECRET_KEY } = process.env

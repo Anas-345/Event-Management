@@ -1,12 +1,12 @@
 import { CalendarDays } from "lucide-react"
 import BrandingPanel from "@/components/auth/BrandingPanel"
-import RegisterForm from "@/components/auth/RegisterForm"
+import LoginForm from "@/components/auth/LoginForm"
 import { NavLink } from "react-router"
 
-export default function Register() {
+export default function Login() {
     return (
         <>
-            <BrandingPanel />
+            <BrandingPanel variant="login" />
 
             <section className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:flex-1 lg:px-10 xl:px-16">
                 <div className="w-full max-w-md">
@@ -16,11 +16,10 @@ export default function Register() {
                         </span>
                         <p className="text-lg font-semibold tracking-tight">EventFlow</p>
                     </div>
-                    <RegisterForm />
-
+                    <LoginForm />
                     <p className="mt-6 text-center text-sm text-text-secondary">
-                        Already have an account?{" "}
-                        <NavLink to="/auth/login" className="cursor-pointer font-medium text-primary">Sign in</NavLink>
+                        Don't have an account?{" "}
+                        <NavLink to="/auth/register" className="cursor-pointer font-medium text-primary">Sign up</NavLink>
                     </p>
                 </div>
             </section>

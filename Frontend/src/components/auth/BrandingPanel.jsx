@@ -1,6 +1,39 @@
 import { CalendarDays, Check } from "lucide-react"
 
-export default function BrandingPanel() {
+const BRANDING_COPY = {
+    register: {
+        eyebrow: "Welcome aboard",
+        heading: "Plan, host, and attend events — all in one place.",
+        body: "Create your account to organize unforgettable experiences or discover events happening near you.",
+        features: [
+            "Host and manage events effortlessly",
+            "Discover events tailored to your interests",
+            "Connect and grow with your community",
+        ],
+        stats: [
+            { value: "140+", label: "Events hosted" },
+            { value: "8.5k", label: "Happy attendees" },
+        ],
+    },
+    login: {
+        eyebrow: "Welcome back",
+        heading: "Your events, your community — right where you left them.",
+        body: "Sign in to continue planning, hosting, and discovering events near you.",
+        features: [
+            "Pick up right where you left off",
+            "Manage your events and attendees in one place",
+            "Stay in the loop with real-time updates",
+        ],
+        stats: [
+            { value: "12k+", label: "Active members" },
+            { value: "2.4k", label: "Events this month" },
+        ],
+    },
+}
+
+export default function BrandingPanel({ variant = "register" }) {
+    const { eyebrow, heading, body, features, stats } = BRANDING_COPY[variant] ?? BRANDING_COPY.register
+
     return <aside className="relative hidden overflow-hidden bg-primary text-white lg:flex lg:w-[46%] lg:flex-col lg:justify-between lg:p-10 xl:w-[44%] xl:p-14">
         <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-black/15 via-transparent to-white/10" aria-hidden="true" />
         <div className="pointer-events-none absolute -top-24 -right-20 h-72 w-72 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
@@ -17,41 +50,31 @@ export default function BrandingPanel() {
         </div>
 
         <div className="relative py-10 xl:py-16">
-            <p className="text-xs font-semibold tracking-[0.22em] text-white/70 uppercase">Welcome aboard</p>
+            <p className="text-xs font-semibold tracking-[0.22em] text-white/70 uppercase">{eyebrow}</p>
             <h1 className="mt-4 max-w-md text-3xl font-semibold leading-tight xl:text-4xl">
-                Plan, host, and attend events — all in one place.
+                {heading}
             </h1>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/75">
-                Create your account to organize unforgettable experiences or discover events happening near you.
+                {body}
             </p>
             <ul className="mt-8 space-y-3.5 text-sm font-medium text-white/90">
-                <li className="flex items-center gap-2.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15"><Check className="h-3.5 w-3.5" aria-hidden="true" />
-                    </span>
-                    Host and manage events effortlessly
-                </li>
-                <li className="flex items-center gap-2.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15"><Check className="h-3.5 w-3.5" aria-hidden="true" />
-                    </span>
-                    Discover events tailored to your interests
-                </li>
-                <li className="flex items-center gap-2.5">
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15"><Check className="h-3.5 w-3.5" aria-hidden="true" />
-                    </span>
-                    Connect and grow with your community
-                </li>
+                {features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-2.5">
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/15"><Check className="h-3.5 w-3.5" aria-hidden="true" />
+                        </span>
+                        {feature}
+                    </li>
+                ))}
             </ul>
         </div>
 
         <div className="relative flex items-center gap-10 border-t border-white/20 pt-6">
-            <div>
-                <p className="text-2xl font-semibold">140+</p>
-                <p className="mt-0.5 text-xs text-white/70">Events hosted</p>
-            </div>
-            <div>
-                <p className="text-2xl font-semibold">8.5k</p>
-                <p className="mt-0.5 text-xs text-white/70">Happy attendees</p>
-            </div>
+            {stats.map(({ value, label }) => (
+                <div key={label}>
+                    <p className="text-2xl font-semibold">{value}</p>
+                    <p className="mt-0.5 text-xs text-white/70">{label}</p>
+                </div>
+            ))}
         </div>
     </aside>
 }

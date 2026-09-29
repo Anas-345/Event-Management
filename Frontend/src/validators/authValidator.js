@@ -20,4 +20,12 @@ const registerValidator = z.object({
     path: ["cnfrm"]
 })
 
-export { registerValidator }
+const loginValidator = z.object({
+    email: z.email("Please enter a valid email address.").trim(),
+    password: z.string()
+        .min(6, "Password must be at least 6 characters long.")
+        .max(20, "Password cannot exceed 20 characters."),
+})
+
+
+export { registerValidator, loginValidator }
