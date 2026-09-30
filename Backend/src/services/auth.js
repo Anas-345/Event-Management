@@ -26,14 +26,16 @@ export class authServices {
         const isPasswordMatch = await compare(password, findUser?.password)
         if (!isPasswordMatch) return { status: 401, message: "Invalid credentials" }
 
-        const token = jwt.sign({ uid: findUser.id }, JWT_SECRET_KEY, { expiresIn: '1h' })
-        return { status: 200, message: "Login successful", token }
+        const refreshToken = jwt.sign({ uid: findUser.id }, JWT_SECRET_KEY, { expiresIn: '3d' })
+        const shortToken = jwt.sign({ uid: findUser.id, role: findUser.role }, JWT_SECRET_KEY, { expiresIn: '15min' })
+        return { status: 200, message: "Login successful", refreshToken, shortToken }
     }
 
     static async getUser(uid) {
         const [user] = await db.select().from(userTable).where(eq(userTable.id, uid)).limit(1)
         if (!user) return { status: 404, message: "User not found" }
         const { password, ...userToSend } = user
-        return { status: 200, message: "User found", data: userToSend }
+        const refreshToken = jwt.sign({ uid: user.id }, JWT_SECRET_KEY, { expiresIn: '3d' })
+        return { status: 200, message: "User found", data: userToSend, refreshToken }
     }
 }

@@ -17,10 +17,14 @@ export class authController {
         try {
             const errors = validationResult(req)
             if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() })
-                const resData = await authServices.login(req.body)
+            const resData = await authServices.login(req.body)
             if (resData.status !== 200) return res.status(resData.status).json({ message: resData.message })
-            res.cookie('token', resData.token, {
-                maxAge: 1000 * 60 * 60,
+            res.cookie('shortToken', resData.shortToken, {
+                maxAge: 1000 * 60 * 15,
+                httpOnly: true, sameSite: 'lax'
+            })
+            res.cookie('refreshToken', resData.refreshToken, {
+                maxAge: 1000 * 60 * 60 * 24 * 3,
                 httpOnly: true, sameSite: 'lax'
             })
             return res.status(resData.status).json({ message: resData.message })
@@ -34,7 +38,15 @@ export class authController {
         try {
             const { uid } = req
             const resData = await authServices.getUser(uid)
-            const { status, message, ...data } = resData
+            const { status, message, refreshToken, ...data } = resData
+            res.clearCookie('refreshToken', {
+                httpOnly: true,
+                sameSite: 'lax'
+            })
+            res.cookie('refreshToken', resData.refreshToken, {
+                maxAge: 1000 * 60 * 60 * 24 * 3,
+                httpOnly: true, sameSite: 'lax'
+            })
             return res.status(status).json({ message, data })
         } catch (error) {
             return res.status(500).json({ message: "Internal Server error" })
@@ -43,7 +55,11 @@ export class authController {
 
     static logout(req, res) {
         try {
-            res.clearCookie('token', {
+            res.clearCookie('refreshToken', {
+                httpOnly: true,
+                sameSite: 'lax',
+            })
+            res.clearCookie('shortToken', {
                 httpOnly: true,
                 sameSite: 'lax',
             })
