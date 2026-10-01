@@ -16,9 +16,9 @@ export default function LoginForm() {
 
     async function submit(data) {
         const res = await loginAPI(data)
-        const success = res.status === 200
-        toast({ title: "Login", type: success ? "success" : "error", message: res.data.message})
-        if (success) navigate("/")
+        if (!res) return
+        toast({ title: "Login", type: "success", message: res.data.message })
+        navigate("/")
     }
 
     function handleErrors(errors) {

@@ -12,7 +12,7 @@ const { JWT_SECRET_KEY } = process.env
 router.get('/refreshToken', async (req, res) => {
     try {
         const token = req.cookies?.refreshToken
-        if (!token) return res.status(403).json({ message: "Refresh token expired" })
+        if (!token) return res.status(401).json({ message: "Refresh token expired" })
         const { uid } = jwt.verify(token, JWT_SECRET_KEY)
         const [findUser] = await db.select().from(userTable).where(eq(userTable.id, uid)).limit(1)
         if (!findUser) return res.status(404).json({ message: "User not found" })

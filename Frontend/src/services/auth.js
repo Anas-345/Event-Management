@@ -1,23 +1,11 @@
-import axios from "axios"
-
-const API = `${import.meta.env.VITE_API_URL}/auth`
+import { api } from "./axios"
 
 async function registerAPI(data) {
-    try {
-        const res = await axios.post(`${API}/register`, data)
-        return res
-    } catch (error) {
-        return error.response
-    }
+    return await api.post('/auth/register', data)
 }
 
 async function loginAPI(data) {
-    try {
-        const res = await axios.post(`${API}/login`, data, { withCredentials: true })
-        return res
-    } catch (error) {
-        return error.response
-    }
+    return await api.post('/auth/login', data,)
 }
 
 export { registerAPI, loginAPI }

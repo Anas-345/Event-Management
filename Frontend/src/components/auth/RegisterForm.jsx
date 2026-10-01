@@ -17,9 +17,9 @@ export default function RegisterForm() {
 
     async function submit(data) {
         const res = await registerAPI(data)
-        const success = res.status === 201
-        toast({ title: "Register", type: success ? "success" : "error", message: res.data.message, })
-        if (success) navigate("/")
+        if (!res) return
+        toast({ title: "Register", type: "success", message: res.data.message, })
+        navigate("/")
     }
 
     function handleErrors(errors) {
