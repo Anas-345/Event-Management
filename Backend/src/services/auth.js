@@ -4,6 +4,7 @@ import { userTable } from "../db/schema.js";
 import { compare, hash } from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
+import {  BadRequest, DuplicationError, NotFound } from "../middlewares/errorHandler.js";
 
 const { JWT_SECRET_KEY } = process.env
 
@@ -11,31 +12,30 @@ export class authServices {
     static async register(body) {
         const { firstName, lastName, email, password, role } = body
         const [findUser] = await db.select().from(userTable).where(eq(userTable.email, email)).limit(1)
-        if (findUser) return { status: 409, message: "User already exists" }
+        if (findUser) throw new DuplicationError("User already exists")
         const hashedPassword = await hash(password, 12)
         await db.insert(userTable).values({
             firstName, lastName, email, password: hashedPassword, role
         })
-        return { status: 201, message: "User created successfully" }
     }
 
     static async login(body) {
         const { email, password } = body
         const [findUser] = await db.select().from(userTable).where(eq(userTable.email, email)).limit(1)
-        if (!findUser) return { status: 401, message: "Invalid credentials" }
+        if (!findUser) throw new BadRequest("Invalid credentials")
         const isPasswordMatch = await compare(password, findUser?.password)
-        if (!isPasswordMatch) return { status: 401, message: "Invalid credentials" }
+        if (!isPasswordMatch) throw new BadRequest("Invalid credentials")
 
         const refreshToken = jwt.sign({ uid: findUser.id }, JWT_SECRET_KEY, { expiresIn: '3d' })
         const shortToken = jwt.sign({ uid: findUser.id, role: findUser.role }, JWT_SECRET_KEY, { expiresIn: '15min' })
-        return { status: 200, message: "Login successful", refreshToken, shortToken }
+        return { refreshToken, shortToken }
     }
 
     static async getUser(uid) {
         const [user] = await db.select().from(userTable).where(eq(userTable.id, uid)).limit(1)
-        if (!user) return { status: 404, message: "User not found" }
+        if (!user) throw new NotFound("User not found")
         const { password, ...userToSend } = user
         const refreshToken = jwt.sign({ uid: user.id }, JWT_SECRET_KEY, { expiresIn: '3d' })
-        return { status: 200, message: "User found", data: userToSend, refreshToken }
+        return { data: userToSend, refreshToken }
     }
 }
