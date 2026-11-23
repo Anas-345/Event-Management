@@ -6,19 +6,25 @@ import InputField from "../common/InputField"
 import { loginValidator } from "@/validators/authValidator"
 import { loginAPI } from "@/services/auth"
 import { useNavigate } from "react-router"
+import { useMutation } from "@tanstack/react-query"
 
 
 export default function LoginForm() {
     const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(loginValidator)
     })
 
-    async function submit(data) {
-        const res = await loginAPI(data)
-        if (!res) return
-        toast({ title: "Login", type: "success", message: res.data.message })
-        navigate("/")
+    const { mutate, isPending } = useMutation({
+        mutationFn: loginAPI,
+        onSuccess: () => {
+            toast({ title: "Login", type: "success", message: "Login Successful" })
+            navigate("/")
+        }
+    })
+
+    function submit(data) {
+        mutate(data)
     }
 
     function handleErrors(errors) {
@@ -74,13 +80,13 @@ export default function LoginForm() {
 
             <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isPending}
                 className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-surface active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-primary disabled:active:scale-100 cursor-pointer"
             >
-                {isSubmitting && (
+                {isPending && (
                     <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" />
                 )}
-                {isSubmitting ? "Signing in..." : "Sign in"}
+                {isPending ? "Signing in..." : "Sign in"}
             </button>
 
             <p className="text-center text-sm">

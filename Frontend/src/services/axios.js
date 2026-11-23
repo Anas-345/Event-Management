@@ -9,11 +9,12 @@ const api = axios.create({
 api.interceptors.response.use(
     (res) => res,
     async function (error) {
-        if (error.response.data?.tokenNotFound) {
+        if (error.response?.data?.tokenNotFound) {
             await api.get('/refreshToken')
             return api(error.config)
         }
-        return toast({ title: "Error", type: "error", message: error.response.data.message })
+        toast({ title: "Error", type: "error", message: error.response.data.message })
+        return Promise.reject(error)
     }
 )
 

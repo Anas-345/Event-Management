@@ -14,7 +14,7 @@ export class authController {
         }
     }
 
-    static async login(req, res) {
+    static async login(req, res, next) {
         try {
             const errors = validationResult(req)
             if (!errors.isEmpty()) throw new BadRequest(errors.array()[0].msg)

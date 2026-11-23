@@ -7,19 +7,28 @@ import InputField from "../common/InputField"
 import { fieldClass } from "../common/inputFieldStyle"
 import { registerAPI } from "@/services/auth"
 import { useNavigate } from "react-router"
+import { useMutation } from "@tanstack/react-query"
 
 
 export default function RegisterForm() {
     const navigate = useNavigate()
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         resolver: zodResolver(registerValidator)
     })
 
-    async function submit(data) {
-        const res = await registerAPI(data)
-        if (!res) return
-        toast({ title: "Register", type: "success", message: res.data.message, })
-        navigate("/")
+    const { isPending, mutate } = useMutation({
+        mutationFn: registerAPI,
+        onSuccess: () => {
+            toast({
+                type: "success",
+                message: "Account created successfully"
+            })
+            navigate("/")
+        }
+    })
+
+    function submit(data) {
+        mutate(data)
     }
 
     function handleErrors(errors) {
@@ -135,13 +144,13 @@ export default function RegisterForm() {
 
             <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isPending}
                 className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary/30 focus:ring-offset-2 focus:ring-offset-surface active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70 disabled:hover:bg-primary disabled:active:scale-100 cursor-pointer"
             >
-                {isSubmitting && (
+                {isPending && (
                     <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" />
                 )}
-                {isSubmitting ? "Creating your account..." : "Create account"}
+                {isPending ? "Creating your account..." : "Create account"}
             </button>
 
             <p className="text-center text-xs leading-relaxed text-text-secondary">
