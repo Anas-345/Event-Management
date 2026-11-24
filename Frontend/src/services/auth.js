@@ -5,7 +5,11 @@ function registerAPI(data) {
 }
 
 function loginAPI(data) {
-    return api.post('/auth/login', data,)
+    return api.post('/auth/login', data)
 }
 
-export { registerAPI, loginAPI }
+function userAPI() {
+    return api.get('/auth/me')
+}
+
+export { registerAPI, loginAPI, userAPI }

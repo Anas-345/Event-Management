@@ -6,8 +6,7 @@ import InputField from "../common/InputField"
 import { loginValidator } from "@/validators/authValidator"
 import { loginAPI } from "@/services/auth"
 import { useNavigate } from "react-router"
-import { useMutation } from "@tanstack/react-query"
-
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 export default function LoginForm() {
     const navigate = useNavigate()
@@ -15,11 +14,16 @@ export default function LoginForm() {
         resolver: zodResolver(loginValidator)
     })
 
+    const queryClient = useQueryClient()
+
     const { mutate, isPending } = useMutation({
         mutationFn: loginAPI,
         onSuccess: () => {
             toast({ title: "Login", type: "success", message: "Login Successful" })
-            navigate("/")
+            queryClient.invalidateQueries({
+                queryKey: ['authState']
+            })
+            navigate('/')
         }
     })
 

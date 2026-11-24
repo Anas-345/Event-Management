@@ -1,11 +1,20 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Router from "./router/Router";
+import AppContent from "./components/common/AppContent";
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: Infinity,
+            gcTime: 1000 * 60 * 60,
+            refetchOnWindowFocus: false,
+        }
+    }
+})
 
 export default function App() {
-    const queryClient = new QueryClient()
     return (
         <QueryClientProvider client={queryClient}>
-            <Router />
+            <AppContent />
         </QueryClientProvider>
     )
 }
