@@ -46,7 +46,7 @@ export class authController {
                 maxAge: 1000 * 60 * 60 * 24 * 3,
                 httpOnly: true, sameSite: 'lax'
             })
-            return res.status(200).json({ message: 'User found', data })
+            return res.status(200).json({ message: 'User found', ...data })
         } catch (error) {
             next(error)
         }

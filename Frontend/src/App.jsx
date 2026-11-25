@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AppContent from "./components/common/AppContent";
+import AppContent from "./components/ui/AppContent";
 
 const queryClient = new QueryClient({
     defaultOptions: {
