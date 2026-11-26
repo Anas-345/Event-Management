@@ -34,7 +34,7 @@ const BRANDING_COPY = {
 export default function BrandingPanel({ variant = "register" }) {
     const { eyebrow, heading, body, features, stats } = BRANDING_COPY[variant] ?? BRANDING_COPY.register
 
-    return <aside className="relative hidden overflow-hidden bg-primary text-white lg:flex lg:w-[46%] lg:flex-col lg:justify-between lg:p-10 xl:w-[44%] xl:p-14">
+    return <aside className="relative hidden self-stretch overflow-hidden bg-primary text-white lg:flex lg:w-[46%] lg:flex-col lg:justify-between lg:p-10 xl:w-[44%] xl:p-14">
         <div className="pointer-events-none absolute inset-0 bg-linear-to-tr from-black/15 via-transparent to-white/10" aria-hidden="true" />
         <div className="pointer-events-none absolute -top-24 -right-20 h-72 w-72 rounded-full bg-white/10 blur-2xl" aria-hidden="true" />
         <div className="pointer-events-none absolute -bottom-28 -left-24 h-80 w-80 rounded-full bg-black/10 blur-2xl" aria-hidden="true" />

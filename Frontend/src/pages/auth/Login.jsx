@@ -8,7 +8,7 @@ export default function Login() {
         <>
             <BrandingPanel variant="login" />
 
-            <section className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6 lg:flex-1 lg:px-10 xl:px-16">
+            <section className="flex flex-1 items-center justify-center px-4 py-10 sm:px-6 lg:px-10 xl:px-16">
                 <div className="w-full max-w-md">
                     <div className="mb-8 flex flex-col items-center gap-3 lg:hidden">
                         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-white shadow-lg shadow-primary/30">
