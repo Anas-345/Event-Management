@@ -2,7 +2,7 @@ import { CalendarDays } from "lucide-react"
 
 export default function AppLoader() {
     return (
-        <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-8 bg-background">
+        <div className="fixed inset-0 z-9999 flex flex-col items-center justify-center gap-8 bg-background">
             <div className="flex flex-col items-center gap-3">
                 <div className="relative flex h-14 w-14 items-center justify-center rounded-2xl bg-primary shadow-lg shadow-primary/30">
                     <CalendarDays className="h-7 w-7 text-white" aria-hidden="true" />

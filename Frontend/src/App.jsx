@@ -7,6 +7,7 @@ const queryClient = new QueryClient({
             staleTime: Infinity,
             gcTime: 1000 * 60 * 60,
             refetchOnWindowFocus: false,
+            retry: false
         }
     }
 })

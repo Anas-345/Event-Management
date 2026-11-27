@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import { db } from '../db/index.js'
 import { userTable } from '../db/schema.js'
-import { eq, notExists } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import { NotFound, UnAuthorize } from '../middlewares/errorHandler.js'
 
 const router = Router()

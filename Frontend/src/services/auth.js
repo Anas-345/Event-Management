@@ -12,4 +12,8 @@ function userAPI() {
     return api.get('/auth/me')
 }
 
-export { registerAPI, loginAPI, userAPI }
+function logoutAPI() {
+    return api.get('/auth/logout')
+}
+
+export { registerAPI, loginAPI, userAPI, logoutAPI }

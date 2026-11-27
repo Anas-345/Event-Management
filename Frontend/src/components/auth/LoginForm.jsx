@@ -23,7 +23,7 @@ export default function LoginForm() {
             queryClient.invalidateQueries({
                 queryKey: ['authState']
             })
-            navigate('/')
+            navigate('/dashboard')
         }
     })
 
